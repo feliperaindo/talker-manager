@@ -2,13 +2,24 @@ const express = require('express');
 const { resolve } = require('path');
 
 const readOneFile = require('../../utils/readOneFile');
-const { HTTP_OK_STATUS, ROOT, PATH_TALKER_FILE } = require('../../utils/sourceOfTruth');
+const { HTTP_OK_STATUS, HTTP_NOT_FOUND_STATUS, 
+  ROOT, PATH_TALKER_FILE, ID } = require('../../utils/sourceOfTruth');
 
 const talkerRouter = express.Router();
 
 talkerRouter.get(ROOT, async (_request, response) => (
     response.status(HTTP_OK_STATUS)
-      .send(await readOneFile(resolve(__dirname, PATH_TALKER_FILE)))
+      .send(await readOneFile(resolve(__dirname, PATH_TALKER_FILE) || []))
   ));
+
+talkerRouter.get(`${ROOT}${ID}`, async ({ params: { id } }, response) => {
+  const talker = (await readOneFile(resolve(__dirname, PATH_TALKER_FILE)))
+    .find(({ id: talkerId }) => (talkerId === +id));
+
+  return (talker === undefined)
+    ? response.status(HTTP_NOT_FOUND_STATUS)
+        .send({ message: 'Pessoa palestrante não encontrada' })
+    : response.status(HTTP_OK_STATUS).send(talker);
+});
 
 module.exports = talkerRouter;

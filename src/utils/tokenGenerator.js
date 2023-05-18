@@ -1,5 +1,7 @@
+const { ALPHABET } = require('./sourceOfTruth');
+
 function tokenGenerator(length) {
-  const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
+  const alphabet = ALPHABET.split('');
   const randomCaracteres = [];
 
   for (let i = 0; i < length; i += 1) {

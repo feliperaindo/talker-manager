@@ -1,4 +1,4 @@
-module.exports = { 
-  talkerRouter: require('./talker/talker'),
-  rootRouter: require('./root/root'),
-};
+const talkerRouter = require('./talker/talker'); 
+const rootRouter = require('./root/root');
+
+module.exports = { talkerRouter, rootRouter };

@@ -9,7 +9,6 @@ const talkerRouter = express.Router();
 talkerRouter.get(ROOT, async (_request, response) => (
     response.status(HTTP_OK_STATUS)
       .send(await readOneFile(resolve(__dirname, PATH_TALKER_FILE)))
-  )
-);
+  ));
 
 module.exports = talkerRouter;

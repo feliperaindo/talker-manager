@@ -13,7 +13,7 @@ function midValidation({ body }, response, next) {
     case emailValidator(body.email):
       return response.status(HTTP_BAD_REQUEST).send({ message: EMAIL_INVALID });
     case passwordValidator(body.password):
-      return response(HTTP_BAD_REQUEST).send({ message: PASSWORD_INVALID }); 
+      return response.status(HTTP_BAD_REQUEST).send({ message: PASSWORD_INVALID }); 
     default: return next();
   }
 }

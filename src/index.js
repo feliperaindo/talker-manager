@@ -1,17 +1,17 @@
 const express = require('express');
 
-const { PORT, ROOT, TALKER, LOGIN } = require('./utils/sourceOfTruth');
+const { RULES_ROUTES } = require('./utils/sourceOfTruth');
 const { talkerRouter, rootRouter, loginRouter } = require('./routes/exporter');
 
 const app = express();
 app.use(express.json());
 
-app.use(ROOT, rootRouter);
+app.use(RULES_ROUTES.ROOT, rootRouter);
 
-app.use(TALKER, talkerRouter);
+app.use(RULES_ROUTES.TALKER, talkerRouter);
 
-app.use(LOGIN, loginRouter);
+app.use(RULES_ROUTES.LOGIN, loginRouter);
 
-app.listen(PORT, () => {
+app.listen(RULES_ROUTES.PORT, () => {
   console.log('Online');
 });

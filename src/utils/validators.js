@@ -1,4 +1,4 @@
-const { PASSWORD_MIN } = require('./sourceOfTruth');
+const { CONSTANTS } = require('./sourceOfTruth');
 
 function emailValidator(email) {
   const regex = /^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_-]+)(\.[a-zA-Z]{2,5}){1,2}$/i;
@@ -6,11 +6,15 @@ function emailValidator(email) {
 }
 
 function passwordValidator(password) {
-  return password.length >= PASSWORD_MIN;
+  return password.length >= CONSTANTS.PASSWORD_MIN;
 }
 
 function objectValidator(object, key) {
   return Object.prototype.hasOwnProperty.call(object, key);
 }
 
-module.exports = { emailValidator, objectValidator, passwordValidator };
+function tokenValidator(token) {
+ return (typeof token === 'string') && (token.length === CONSTANTS.TOKEN_LENGTH);
+}
+
+module.exports = { emailValidator, objectValidator, passwordValidator, tokenValidator };

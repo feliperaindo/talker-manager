@@ -9,8 +9,8 @@ const loginRouter = express.Router();
 
 loginRouter.use(midLoginValidation);
 
-loginRouter.post(RULES_ROUTES.ROOT, (_request, response) => {
-  response.status(HTTP.OK_STATUS).send({ token: tokenGenerator(CONSTANTS.TOKEN_LENGTH) });
-});
+loginRouter.post(RULES_ROUTES.ROOT, (_request, response) => (
+  response.status(HTTP.OK_STATUS).send({ token: tokenGenerator(CONSTANTS.TOKEN_LENGTH) })
+));
 
 module.exports = loginRouter;

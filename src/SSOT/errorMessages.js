@@ -1,6 +1,4 @@
-function requiredMessage(field) {
-  return `O campo "${field}" é obrigatório`;
-}
+const requiredMessage = (field) => `O campo "${field}" é obrigatório`;
 
 const EMAIL_NOT_FOUND = requiredMessage('email');
 const PASSWORD_NOT_FOUND = requiredMessage('password');

@@ -1,0 +1,7 @@
+// HTTP status
+const OK_STATUS = 200;
+const TOKEN_NOT_FOUND = 401;
+const NOT_FOUND_STATUS = 404;
+const BAD_REQUEST = 400;
+
+module.exports = { OK_STATUS, TOKEN_NOT_FOUND, NOT_FOUND_STATUS, BAD_REQUEST };

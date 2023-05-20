@@ -9,7 +9,10 @@ const TALK_KEY = 'talk';
 const WATCHED_AT_KEY = 'watchedAt';
 const RATE_KEY = 'rate';
 const PASSWORD_MIN = 6;
+const NAME_MIN = 3;
 const TOKEN_LENGTH = 16;
+const RATE_MIN = 1;
+const RATE_MAX = 5;
 
 module.exports = {
   ALPHABET,
@@ -23,4 +26,7 @@ module.exports = {
   RATE_KEY,
   PASSWORD_MIN,
   TOKEN_LENGTH,
+  NAME_MIN,
+  RATE_MAX,
+  RATE_MIN,
 };

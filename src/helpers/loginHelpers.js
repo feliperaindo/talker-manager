@@ -1,4 +1,5 @@
-const { errors, constants } = require('../SSOT/exporter');
+const { errors, constants, HTTP } = require('../SSOT/exporter');
+const { emailValidator, passwordValidator } = require('../utils/validators');
 
 function loginHelpers() {
   const keysAndErrors = () => [
@@ -12,7 +13,19 @@ function loginHelpers() {
       },
     ];
 
-  return { keysAndErrors };
+  return keysAndErrors;
 }
 
-module.exports = loginHelpers();
+function emailChecker(email) {
+  if (!emailValidator(email)) {
+    throw Error(errors.EMAIL_INVALID, { cause: HTTP.BAD_REQUEST });
+  }
+}
+
+function passwordChecker(password) {
+  if (!passwordValidator(password)) {
+    throw Error(errors.PASSWORD_INVALID, { cause: HTTP.BAD_REQUEST });
+  }
+}
+
+module.exports = { loginHelpers, passwordChecker, emailChecker };

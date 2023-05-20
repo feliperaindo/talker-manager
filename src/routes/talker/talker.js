@@ -2,12 +2,11 @@ const express = require('express');
 const { resolve } = require('path');
 
 const fileReader = require('../../utils/fileReader');
-const {
-  // midTalkerValidation,
-  midTokenValidation,
-  midTokenChecker } = require('../../middleware/midValidations');
+
+const { midErrorHandler, midValidations } = require('../../middleware/exporter');
 
 const { HTTP, errors, routes, paths } = require('../../SSOT/exporter');
+const fileWriter = require('../../utils/fileWriter');
 
 const talkerRouter = express.Router();
 
@@ -26,12 +25,29 @@ talkerRouter.get(`${routes.ROOT}${routes.ID}`, async ({ params: { id } }, respon
     : response.status(HTTP.OK_STATUS).send(talker);
 });
 
-talkerRouter.use(midTokenChecker, midTokenValidation);
+talkerRouter.use(
+  midValidations.midTokenChecker,
+  midValidations.midTokenValidation,
+  midValidations.midTalkerValidation,
+);
 
-// midTalkerValidation
+talkerRouter.post(routes.ROOT, async (request, response) => {
+  const newTalker = await fileWriter(
+    resolve(__dirname, paths.PATH_TALKER_FILE),
+    {
+      name: request.body.name,
+      age: request.body.age,
+      talk:
+        {
+          watchedAt: request.body.talk.watchedAt,
+          rate: request.body.talk.rate,
+        },
+    },
+  );
 
-// talkerRouter.post(routes.ROOT, (request, response) => {
- 
-// });
+  return response.status(HTTP.CREATED_STATUS).send(newTalker);
+});
+
+talkerRouter.use(midErrorHandler);
 
 module.exports = talkerRouter;

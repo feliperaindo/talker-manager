@@ -2,11 +2,11 @@ const express = require('express');
 const { resolve } = require('path');
 
 const fileReader = require('../../utils/fileReader');
+const fileWriter = require('../../utils/fileWriter');
 
 const { midErrorHandler, midValidations } = require('../../middleware/exporter');
 
 const { HTTP, errors, routes, paths } = require('../../SSOT/exporter');
-const fileWriter = require('../../utils/fileWriter');
 
 const talkerRouter = express.Router();
 

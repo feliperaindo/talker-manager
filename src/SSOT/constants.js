@@ -1,4 +1,3 @@
-// App constants
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
 const EMAIL_KEY = 'email';
 const PASSWORD_KEY = 'password';

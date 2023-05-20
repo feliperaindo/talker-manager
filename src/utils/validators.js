@@ -1,4 +1,4 @@
-const { CONSTANTS } = require('./sourceOfTruth');
+const { constants } = require('../SSOT/exporter');
 
 function emailValidator(email) {
   const regex = /^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_-]+)(\.[a-zA-Z]{2,5}){1,2}$/i;
@@ -6,7 +6,7 @@ function emailValidator(email) {
 }
 
 function passwordValidator(password) {
-  return password.length >= CONSTANTS.PASSWORD_MIN;
+  return password.length >= constants.PASSWORD_MIN;
 }
 
 function objectValidator(object, key) {
@@ -14,7 +14,7 @@ function objectValidator(object, key) {
 }
 
 function tokenValidator(token) {
- return (typeof token === 'string') && (token.length === CONSTANTS.TOKEN_LENGTH);
+ return (typeof token === 'string') && (token.length === constants.TOKEN_LENGTH);
 }
 
 module.exports = { emailValidator, objectValidator, passwordValidator, tokenValidator };

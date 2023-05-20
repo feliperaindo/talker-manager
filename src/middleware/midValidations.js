@@ -1,35 +1,53 @@
-const { objectValidator, emailValidator,
-  passwordValidator, tokenValidator } = require('../utils/validators');
+const { 
+  objectValidator,
+  emailValidator,
+  passwordValidator,
+  tokenValidator } = require('../utils/validators');
 
-const { HTTP, CONSTANTS } = require('../utils/sourceOfTruth');
+const loginHelpers = require('../helpers/loginHelpers');
 
-const MESSAGES = require('../utils/errorMessages');
+const { HTTP, constants, errors } = require('../SSOT/exporter');
 
 function keysChecker(object, array) {
-  try {
-    array.every((keys) => {
-      objectValidator(object, keys.keyName);
-    
-      if (boolean) {
-        return true;
-      } 
-        throw Error(keys.notExistError);
-    });
-  } catch (error) {
-    console.log(error);
-    return error;
+  array.forEach((key) => {
+    if (!objectValidator(object, key.keyName)) {
+      throw Error(key.notExistError, { cause: HTTP.BAD_REQUEST });
+    }
+  });
+}
+
+function emailChecker(email) {
+  if (!emailValidator(email)) {
+    throw Error(errors.EMAIL_INVALID, { cause: HTTP.BAD_REQUEST });
   }
 }
 
-function midLoginValidation({ body }, response, next) {
-  if (!emailValidator(body.email)) {
-    return response.status(HTTP.BAD_REQUEST).send({ message: MESSAGES.EMAIL_INVALID });
+function passwordChecker(password) {
+  if (!passwordValidator(password)) {
+    throw Error(errors.PASSWORD_INVALID, { cause: HTTP.BAD_REQUEST });
   }
-  if (!passwordValidator(body.password)) {
-    return response.status(HTTP.BAD_REQUEST).send({ message: MESSAGES.PASSWORD_INVALID });
-  }
-  next();
 }
+
+function midLoginValidation(request, response, next) {
+  try {
+    keysChecker(request.body, loginHelpers.keysAndErrors());
+    emailChecker(request.body.email);
+    passwordChecker(request.body.password);
+    next();
+  } catch (error) {
+    next(error);
+  }
+}
+
+// function midLoginValidation({ body }, response, next) {
+//   if (!emailValidator(body.email)) {
+//     return response.status(HTTP.BAD_REQUEST).send({ message: MESSAGES.EMAIL_INVALID });
+//   }
+//   if (!passwordValidator(body.password)) {
+//     return response.status(HTTP.BAD_REQUEST).send({ message: MESSAGES.PASSWORD_INVALID });
+//   }
+//   next();
+// }
 
 // function midLoginValidation({ body }, response, next) {
 //   switch (false) {
@@ -61,15 +79,15 @@ function midLoginValidation({ body }, response, next) {
 // }
 
 function midTokenChecker({ headers }, response, next) {
- return objectValidator(headers, CONSTANTS.AUTHORIZATION_KEY) 
+ return objectValidator(headers, constants.AUTHORIZATION_KEY) 
   ? next()
-  : response.status(HTTP.TOKEN_NOT_FOUND).send({ message: MESSAGES.TOKEN_NOT_FOUND });
+  : response.status(HTTP.TOKEN_NOT_FOUND).send({ message: errors.TOKEN_NOT_FOUND });
 }
 
 function midTokenValidation({ headers: { authorization } }, response, next) {
   return tokenValidator(authorization) 
     ? next()
-    : response.status(HTTP.TOKEN_NOT_FOUND).send({ message: MESSAGES.TOKEN_INVALID });
+    : response.status(HTTP.TOKEN_NOT_FOUND).send({ message: errors.TOKEN_INVALID });
 }
 
 module.exports = {

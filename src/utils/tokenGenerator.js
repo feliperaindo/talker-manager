@@ -1,7 +1,7 @@
-const { CONSTANTS } = require('./sourceOfTruth');
+const { constants } = require('../SSOT/exporter');
 
 function tokenGenerator(length) {
-  const alphabet = CONSTANTS.ALPHABET.split('');
+  const alphabet = constants.ALPHABET.split('');
   const randomCaracteres = [];
 
   for (let i = 0; i < length; i += 1) {

@@ -1,16 +1,18 @@
 const express = require('express');
 
 const tokenGenerator = require('../../utils/tokenGenerator');
-const { midLoginValidation } = require('../../middleware/midValidations');
+const { midErrorHandler, midValidations } = require('../../middleware/exporter');
 
-const { CONSTANTS, HTTP, RULES_ROUTES } = require('../../utils/sourceOfTruth');
+const { HTTP, routes, constants } = require('../../SSOT/exporter');
 
 const loginRouter = express.Router();
 
-loginRouter.use(midLoginValidation);
+loginRouter.use(midValidations.midLoginValidation);
 
-loginRouter.post(RULES_ROUTES.ROOT, (_request, response) => (
-  response.status(HTTP.OK_STATUS).send({ token: tokenGenerator(CONSTANTS.TOKEN_LENGTH) })
+loginRouter.post(routes.ROOT, (_request, response) => (
+  response.status(HTTP.OK_STATUS).send({ token: tokenGenerator(constants.TOKEN_LENGTH) })
 ));
+
+loginRouter.use(midErrorHandler);
 
 module.exports = loginRouter;

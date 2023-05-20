@@ -1,20 +1,18 @@
-const errors = require('../utils/errorMessages');
+const { errors, constants } = require('../SSOT/exporter');
 
 function loginHelpers() {
   const keysAndErrors = () => [
       { 
-        keyName: 'EMAIL_KEY',
-        notExistError: { message: errors.EMAIL_NOT_FOUND },
-        invalidError: { message: errors.EMAIL_INVALID },
+        keyName: constants.EMAIL_KEY,
+        notExistError: errors.EMAIL_NOT_FOUND,
       },
       { 
-        keyName: 'PASSWORD_KEY',
-        notExistError: { message: errors.PASSWORD_NOT_FOUND },
-        invalidError: { message: errors.PASSWORD_INVALID },
+        keyName: constants.PASSWORD_KEY,
+        notExistError: errors.PASSWORD_NOT_FOUND,
       },
     ];
 
   return { keysAndErrors };
 }
 
-module.exports = loginHelpers;
+module.exports = loginHelpers();

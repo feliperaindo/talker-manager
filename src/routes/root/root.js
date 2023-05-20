@@ -2,10 +2,10 @@ const express = require('express');
 
 const rootRouter = express.Router();
 
-const { HTTP, RULES_ROUTES } = require('../../utils/sourceOfTruth');
+const { HTTP, routes } = require('../../SSOT/exporter');
 
 // não remova esse endpoint, e para o avaliador funcionar
-rootRouter.get(RULES_ROUTES.ROOT, (_request, response) => {
+rootRouter.get(routes.ROOT, (_request, response) => {
   response.status(HTTP.OK_STATUS).send();
 });
 

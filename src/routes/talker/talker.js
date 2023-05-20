@@ -7,23 +7,22 @@ const {
   midTokenValidation,
   midTokenChecker } = require('../../middleware/midValidations');
 
-const MESSAGES = require('../../utils/errorMessages');
-const { HTTP, RULES_ROUTES } = require('../../utils/sourceOfTruth');
+const { HTTP, errors, routes, paths } = require('../../SSOT/exporter');
 
 const talkerRouter = express.Router();
 
-talkerRouter.get(RULES_ROUTES.ROOT, async (_request, response) => (
+talkerRouter.get(routes.ROOT, async (_request, response) => (
     response.status(HTTP.OK_STATUS)
-      .send(await fileReader(resolve(__dirname, RULES_ROUTES.PATH_TALKER_FILE) || []))
+      .send(await fileReader(resolve(__dirname, paths.PATH_TALKER_FILE) || []))
   ));
 
-talkerRouter.get(`${RULES_ROUTES.ROOT}${RULES_ROUTES.ID}`, async ({ params: { id } }, response) => {
-  const talker = (await fileReader(resolve(__dirname, RULES_ROUTES.PATH_TALKER_FILE)))
+talkerRouter.get(`${routes.ROOT}${routes.ID}`, async ({ params: { id } }, response) => {
+  const talker = (await fileReader(resolve(__dirname, paths.PATH_TALKER_FILE)))
     .find(({ id: talkerId }) => (talkerId === +id));
 
   return (talker === undefined)
     ? response.status(HTTP.NOT_FOUND_STATUS)
-        .send({ message: MESSAGES.TALKER_NOT_FOUND })
+        .send({ message: errors.TALKER_NOT_FOUND })
     : response.status(HTTP.OK_STATUS).send(talker);
 });
 
@@ -31,7 +30,7 @@ talkerRouter.use(midTokenChecker, midTokenValidation);
 
 // midTalkerValidation
 
-// talkerRouter.post(RULES_ROUTES.ROOT, (request, response) => {
+// talkerRouter.post(routes.ROOT, (request, response) => {
  
 // });
 

@@ -18,14 +18,14 @@ talkerRouter.get(routes.ROOT, async (_request, response) => (
     response.status(HTTP.OK_STATUS).send(await fileReader() || [])
 ));
 
-talkerRouter.get(`${routes.ROOT}${routes.SEARCH}`,
+talkerRouter.get(routes.SEARCH,
   midValidations.midTokenValidation,
   async (request, response) => {
     const talkers = await searchByName(request.query.q);
     return response.status(HTTP.OK_STATUS).send(talkers);
 });
 
-talkerRouter.get(`${routes.ROOT}${routes.ID}`, 
+talkerRouter.get(routes.ID, 
   midValidations.midIdValidation,
   async (request, response) => {
     const talkers = await fileReader();
@@ -35,7 +35,7 @@ talkerRouter.get(`${routes.ROOT}${routes.ID}`,
 
 talkerRouter.use(midValidations.midTokenValidation);
 
-talkerRouter.delete(`${routes.ROOT}${routes.ID}`, async (request, response) => {
+talkerRouter.delete(routes.ID, async (request, response) => {
     removeTalker(Number(request.params.id));
     return response.status(HTTP.DELETE_STATUS).send();
 });
@@ -47,7 +47,7 @@ talkerRouter.post(routes.ROOT, async (request, response) => {
   return response.status(HTTP.CREATED_STATUS).send(newTalker);
 });
 
-talkerRouter.put(`${routes.ROOT}${routes.ID}`,
+talkerRouter.put(routes.ID,
   midValidations.midIdValidation,
   async (request, response) => {
     const talkerUpdated = await updateTalker(Number(request.params.id), request.body);

@@ -40,4 +40,16 @@ async function removeTalker(id) {
   await fileWriter(removedTalker);
 }
 
-module.exports = { talkerCreator, talkerFinder, addTalker, updateTalker, removeTalker };
+async function searchByName(name) {
+  const allTalkers = await fileReader();
+  return allTalkers.filter((talker) => talker.name.includes(name));
+}
+
+module.exports = { 
+  talkerCreator,
+  talkerFinder,
+  addTalker,
+  updateTalker,
+  removeTalker,
+  searchByName,
+};

@@ -1,11 +1,20 @@
-const { objectValidator, tokenValidator } = require('../utils/validators');
+const fileReader = require('../utils/fileReader');
+
+const { objectValidator } = require('../utils/validators');
+const { talkerFinder } = require('../utils/talkerUtils');
 
 const { loginHelpers, emailChecker, passwordChecker } = require('../helpers/loginHelpers');
 
-const { talkerHelpers, nameChecker,
-  dateChecker, rateChecker, ageChecker } = require('../helpers/talkerHelpers');
+const {
+  talkerHelpers,
+  nameChecker,
+  dateChecker,
+  rateChecker,
+  ageChecker,
+  tokenExistChecker,
+  tokenChecker } = require('../helpers/talkerHelpers');
 
-const { HTTP, constants, errors } = require('../SSOT/exporter');
+const { HTTP, errors } = require('../SSOT/exporter');
 
 function keysChecker(object, array) {
   array.forEach((key) => {
@@ -40,21 +49,33 @@ function midTalkerValidation(request, _response, next) {
   }
 }
 
-function midTokenChecker({ headers }, response, next) {
- return objectValidator(headers, constants.AUTHORIZATION_KEY) 
-  ? next()
-  : response.status(HTTP.TOKEN_NOT_FOUND).send({ message: errors.TOKEN_NOT_FOUND });
+function midTokenValidation(request, _response, next) {
+  try {
+    tokenExistChecker(request.headers);
+    tokenChecker(request.headers.authorization);
+    next();
+  } catch (error) {
+    next(error);
+  }
 }
 
-function midTokenValidation({ headers: { authorization } }, response, next) {
-  return tokenValidator(authorization) 
-    ? next()
-    : response.status(HTTP.TOKEN_NOT_FOUND).send({ message: errors.TOKEN_INVALID });
+async function midIdValidation(request, _response, next) {
+  try {
+    const talkers = await fileReader();
+    const talker = talkerFinder(+request.params.id, talkers);
+
+    if (!talker) {
+      throw Error(errors.TALKER_NOT_FOUND, { cause: HTTP.NOT_FOUND_STATUS });
+    }
+    return next();
+  } catch (error) {
+    return next(error);
+  }
 }
 
 module.exports = {
   midLoginValidation,
-  midTokenChecker,
   midTokenValidation,
   midTalkerValidation,
+  midIdValidation,
 };

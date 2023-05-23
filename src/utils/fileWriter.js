@@ -1,12 +1,12 @@
 const { writeFile } = require('fs').promises;
+const { resolve } = require('path');
+const { paths } = require('../SSOT/exporter');
 
-const fileReader = require('./fileReader');
+// const oldData = await fileReader();
+// const newTalker = talkerCreator(data, (oldData.length + 1));
 
-async function fileWriter(fileName, newData) {
-  const oldData = await fileReader(fileName);
-  const dataUpdate = [...oldData, { ...newData, id: (oldData.length + 1) }];
-  await writeFile(fileName, JSON.stringify(dataUpdate));
-  return { ...newData, id: (oldData.length + 1) };
+async function fileWriter(data) {
+  await writeFile(resolve(__dirname, paths.PATH_TALKER_FILE), JSON.stringify(data));
 }
 
 module.exports = fileWriter;

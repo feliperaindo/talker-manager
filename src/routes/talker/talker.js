@@ -1,52 +1,45 @@
 const express = require('express');
-const { resolve } = require('path');
 
 const fileReader = require('../../utils/fileReader');
-const fileWriter = require('../../utils/fileWriter');
+const { talkerFinder, addTalker, updateTalker } = require('../../utils/talkerUtils');
 
 const { midErrorHandler, midValidations } = require('../../middleware/exporter');
 
-const { HTTP, errors, routes, paths } = require('../../SSOT/exporter');
+const { HTTP, routes } = require('../../SSOT/exporter');
 
 const talkerRouter = express.Router();
 
 talkerRouter.get(routes.ROOT, async (_request, response) => (
     response.status(HTTP.OK_STATUS)
-      .send(await fileReader(resolve(__dirname, paths.PATH_TALKER_FILE) || []))
+      .send(await fileReader() || [])
   ));
 
-talkerRouter.get(`${routes.ROOT}${routes.ID}`, async ({ params: { id } }, response) => {
-  const talker = (await fileReader(resolve(__dirname, paths.PATH_TALKER_FILE)))
-    .find(({ id: talkerId }) => (talkerId === +id));
-
-  return (talker === undefined)
-    ? response.status(HTTP.NOT_FOUND_STATUS)
-        .send({ message: errors.TALKER_NOT_FOUND })
-    : response.status(HTTP.OK_STATUS).send(talker);
-});
+talkerRouter.get(`${routes.ROOT}${routes.ID}`, 
+  midValidations.midIdValidation,
+  async (request, response) => {
+    const talkers = await fileReader();
+    const talker = talkerFinder(+request.params.id, talkers);
+    response.status(HTTP.OK_STATUS).send(talker); 
+  });
 
 talkerRouter.use(
-  midValidations.midTokenChecker,
   midValidations.midTokenValidation,
   midValidations.midTalkerValidation,
 );
 
 talkerRouter.post(routes.ROOT, async (request, response) => {
-  const newTalker = await fileWriter(
-    resolve(__dirname, paths.PATH_TALKER_FILE),
-    {
-      name: request.body.name,
-      age: request.body.age,
-      talk:
-        {
-          watchedAt: request.body.talk.watchedAt,
-          rate: request.body.talk.rate,
-        },
-    },
-  );
+  const newTalker = await addTalker(request.body);
 
   return response.status(HTTP.CREATED_STATUS).send(newTalker);
 });
+
+talkerRouter.put(`${routes.ROOT}${routes.ID}`,
+  midValidations.midIdValidation,
+  async (request, response) => {
+    const talkerUpdated = await updateTalker(Number(request.params.id), request.body);
+    console.log(talkerUpdated);
+    response.status(HTTP.OK_STATUS).send(talkerUpdated);
+  });
 
 talkerRouter.use(midErrorHandler);
 

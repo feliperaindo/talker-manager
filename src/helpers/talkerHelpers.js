@@ -3,7 +3,9 @@ const {
   nameValidator, 
   ageValidator, 
   dateFormatValidator, 
-  rateValidator } = require('../utils/validators');
+  rateValidator, 
+  objectValidator, 
+  tokenValidator } = require('../utils/validators');
 
 function talkerHelpers() {
   const keysAndErrors = () => [
@@ -19,6 +21,18 @@ function talkerHelpers() {
 
   return { keysAndErrors, deepKeysAndErrors };
 }
+
+function tokenExistChecker(headers) {
+  if (!objectValidator(headers, constants.AUTHORIZATION_KEY)) {
+    throw Error(errors.TOKEN_NOT_FOUND, { cause: HTTP.TOKEN_NOT_FOUND });
+  }
+ }
+
+ function tokenChecker(token) {
+  if (!tokenValidator(token)) {
+    throw Error(errors.TOKEN_INVALID, { cause: HTTP.TOKEN_NOT_FOUND });
+  }
+ }
 
 function nameChecker(name) {
   if (!nameValidator(name)) {
@@ -50,4 +64,6 @@ module.exports = {
   ageChecker,
   dateChecker,
   rateChecker,
+  tokenExistChecker,
+  tokenChecker,
 };

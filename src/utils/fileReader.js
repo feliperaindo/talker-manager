@@ -1,7 +1,10 @@
 const { readFile } = require('fs').promises;
+const { resolve } = require('path');
 
-async function fileReader(fileName) {
- return JSON.parse(await readFile(fileName));
+const { paths } = require('../SSOT/exporter');
+
+async function fileReader() {
+ return JSON.parse(await readFile(resolve(__dirname, paths.PATH_TALKER_FILE)));
 }
 
 module.exports = fileReader;

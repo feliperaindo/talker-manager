@@ -1,7 +1,7 @@
 const express = require('express');
 
 const fileReader = require('../../utils/fileReader');
-const { talkerFinder, addTalker, updateTalker } = require('../../utils/talkerUtils');
+const { talkerFinder, addTalker, updateTalker, removeTalker } = require('../../utils/talkerUtils');
 
 const { midErrorHandler, midValidations } = require('../../middleware/exporter');
 
@@ -21,6 +21,13 @@ talkerRouter.get(`${routes.ROOT}${routes.ID}`,
     const talker = talkerFinder(+request.params.id, talkers);
     response.status(HTTP.OK_STATUS).send(talker); 
   });
+
+talkerRouter.delete(`${routes.ROOT}${routes.ID}`,
+  midValidations.midTokenValidation,
+  async (request, response) => {
+    removeTalker(Number(request.params.id));
+    response.status(HTTP.DELETE_STATUS).send('');
+});
 
 talkerRouter.use(
   midValidations.midTokenValidation,

@@ -34,4 +34,10 @@ async function updateTalker(id, newInfo) {
   return talkerFinder(id, dataUpdate);
 }
 
-module.exports = { talkerCreator, talkerFinder, addTalker, updateTalker };
+async function removeTalker(id) {
+  const oldData = await fileReader();
+  const removedTalker = oldData.filter((talker) => talker.id !== id);
+  await fileWriter(removedTalker);
+}
+
+module.exports = { talkerCreator, talkerFinder, addTalker, updateTalker, removeTalker };

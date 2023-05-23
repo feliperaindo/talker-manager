@@ -37,7 +37,6 @@ talkerRouter.put(`${routes.ROOT}${routes.ID}`,
   midValidations.midIdValidation,
   async (request, response) => {
     const talkerUpdated = await updateTalker(Number(request.params.id), request.body);
-    console.log(talkerUpdated);
     response.status(HTTP.OK_STATUS).send(talkerUpdated);
   });
 

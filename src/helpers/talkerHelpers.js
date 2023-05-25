@@ -22,6 +22,19 @@ function talkerHelpers() {
   return { keysAndErrors, deepKeysAndErrors };
 }
 
+function talkerCreator(talker, id) {
+  return {
+      id,
+      name: talker.name,
+      age: talker.age,
+      talk:
+        {
+          watchedAt: talker.talk.watchedAt,
+          rate: talker.talk.rate,
+        },
+    };
+}
+
 function tokenExistChecker(headers) {
   if (!objectValidator(headers, constants.AUTHORIZATION_KEY)) {
     throw Error(errors.TOKEN_NOT_FOUND, { cause: HTTP.TOKEN_NOT_FOUND });
@@ -73,4 +86,5 @@ module.exports = {
   tokenExistChecker,
   tokenChecker,
   dateChecker,
+  talkerCreator,
 };

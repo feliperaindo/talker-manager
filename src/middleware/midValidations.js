@@ -3,16 +3,8 @@ const fileReader = require('../utils/fileReader');
 const { objectValidator } = require('../utils/validators');
 const { talkerFinder } = require('../utils/talkerUtils');
 
-const { loginHelpers, emailChecker, passwordChecker } = require('../helpers/loginHelpers');
-
-const {
-  talkerHelpers,
-  nameChecker,
-  rateChecker,
-  ageChecker,
-  tokenExistChecker,
-  tokenChecker, 
-  watchedAtChecker } = require('../helpers/talkerHelpers');
+const lh = require('../helpers/loginHelpers');
+const th = require('../helpers/talkerHelpers');
 
 const { HTTP, errors, constants } = require('../SSOT/exporter');
 
@@ -26,9 +18,9 @@ function keysChecker(object, array) {
 
 function midLoginValidation(request, _response, next) {
   try {
-    keysChecker(request.body, loginHelpers()());
-    emailChecker(request.body.email);
-    passwordChecker(request.body.password);
+    keysChecker(request.body, lh.loginHelpers()());
+    lh.emailChecker(request.body.email);
+    lh.passwordChecker(request.body.password);
     next();
   } catch (error) {
     next(error);
@@ -37,12 +29,12 @@ function midLoginValidation(request, _response, next) {
 
 function midTalkerValidation(request, _response, next) {
   try {
-    keysChecker(request.body, talkerHelpers.keysAndErrors());
-    keysChecker(request.body.talk, talkerHelpers.deepKeysAndErrors());
-    ageChecker(request.body.age);
-    nameChecker(request.body.name);
-    watchedAtChecker(request.body.talk.watchedAt);
-    rateChecker(request.body.talk.rate);
+    keysChecker(request.body, th.talkerHelpers.keysAndErrors());
+    keysChecker(request.body.talk, th.talkerHelpers.deepKeysAndErrors());
+    th.ageChecker(request.body.age);
+    th.nameChecker(request.body.name);
+    th.watchedAtChecker(request.body.talk.watchedAt);
+    th.rateChecker(request.body.talk.rate);
     next();
   } catch (error) {
     next(error);
@@ -51,8 +43,8 @@ function midTalkerValidation(request, _response, next) {
 
 function midTokenValidation(request, _response, next) {
   try {
-    tokenExistChecker(request.headers);
-    tokenChecker(request.headers.authorization);
+    th.tokenExistChecker(request.headers);
+    th.tokenChecker(request.headers.authorization);
     next();
   } catch (error) {
     next(error);
@@ -78,7 +70,7 @@ async function midRateValidation(request, _response, next) {
     if (!objectValidator(request.body, constants.RATE_KEY)) {
       throw Error(errors.RATE_NOT_FOUND, { cause: HTTP.BAD_REQUEST });
     }
-    rateChecker(request.body.rate);
+    th.rateChecker(request.body.rate);
     next();
   } catch (error) {
     return next(error);

@@ -1,7 +1,8 @@
 const express = require('express');
 
-const tokenGenerator = require('../../utils/tokenGenerator');
 const { midErrorHandler, midValidations } = require('../../middleware/exporter');
+
+const tokenGenerator = require('../../utils/tokenGenerator');
 
 const { HTTP, routes, constants } = require('../../SSOT/exporter');
 

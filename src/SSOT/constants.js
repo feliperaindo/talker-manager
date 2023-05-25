@@ -1,4 +1,6 @@
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+
+// KEYS
 const EMAIL_KEY = 'email';
 const PASSWORD_KEY = 'password';
 const AUTHORIZATION_KEY = 'authorization';
@@ -7,13 +9,19 @@ const AGE_KEY = 'age';
 const TALK_KEY = 'talk';
 const WATCHED_AT_KEY = 'watchedAt';
 const RATE_KEY = 'rate';
+
+// RULES
 const PASSWORD_MIN = 6;
 const NAME_MIN = 3;
 const TOKEN_LENGTH = 16;
 const RATE_MIN = 1;
 const RATE_MAX = 5;
+
+// PARAMETERS
 const QUERY_Q = 'q';
 const QUERY_DATE = 'date';
+
+// DATABASE
 const LOCALHOST = 'localhost';
 const USER_DB = 'root';
 const PASSWORD_DB = 'password';

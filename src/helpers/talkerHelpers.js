@@ -1,11 +1,5 @@
 const { errors, constants, HTTP } = require('../SSOT/exporter');
-const { 
-  nameValidator, 
-  ageValidator, 
-  dateFormatValidator, 
-  rateValidator, 
-  objectValidator, 
-  tokenValidator } = require('../utils/validators');
+const validators = require('../utils/validators');
 
 function talkerHelpers() {
   const keysAndErrors = () => [
@@ -35,44 +29,57 @@ function talkerCreator(talker, id) {
     };
 }
 
+function talkerAdjusted(talker) {
+  return {
+    id: talker.id,
+    name: talker.name,
+    age: talker.age,
+    talk: 
+      {
+        watchedAt: talker.talk_watched_at,
+        rate: talker.talk_rate,
+      },
+  };
+}
+
 function tokenExistChecker(headers) {
-  if (!objectValidator(headers, constants.AUTHORIZATION_KEY)) {
+  if (!validators.objectValidator(headers, constants.AUTHORIZATION_KEY)) {
     throw Error(errors.TOKEN_NOT_FOUND, { cause: HTTP.TOKEN_NOT_FOUND });
   }
  }
 
  function tokenChecker(token) {
-  if (!tokenValidator(token)) {
+  if (!validators.tokenValidator(token)) {
     throw Error(errors.TOKEN_INVALID, { cause: HTTP.TOKEN_NOT_FOUND });
   }
  }
 
 function nameChecker(name) {
-  if (!nameValidator(name)) {
+  if (!validators.nameValidator(name)) {
     throw Error(errors.NAME_INVALID, { cause: HTTP.BAD_REQUEST });
   }
 }
 
 function ageChecker(age) {
-  if (!ageValidator(age)) {
+  if (!validators.ageValidator(age)) {
     throw Error(errors.AGE_INVALID, { cause: HTTP.BAD_REQUEST });
   }
 }
 
 function watchedAtChecker(date) {
-  if (!dateFormatValidator(date)) {
+  if (!validators.dateFormatValidator(date)) {
     throw Error(errors.WATCHED_AT_INVALID, { cause: HTTP.BAD_REQUEST });
   }
 }
 
 function dateChecker(date) {
-  if (!dateFormatValidator(date)) {
+  if (!validators.dateFormatValidator(date)) {
     throw Error(errors.DATE_INVALID, { cause: HTTP.BAD_REQUEST });
   }
 }
 
 function rateChecker(rate) {
-  if (!rateValidator(rate)) {
+  if (!validators.rateValidator(rate)) {
     throw Error(errors.RATE_INVALID, { cause: HTTP.BAD_REQUEST });
   }
 }
@@ -87,4 +94,5 @@ module.exports = {
   tokenChecker,
   dateChecker,
   talkerCreator,
+  talkerAdjusted,
 };

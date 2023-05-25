@@ -1,7 +1,7 @@
 const fileReader = require('./fileReader');
 const fileWriter = require('./fileWriter');
 
-const { talkerCreator } = require('../helpers/talkerHelpers');
+const { talkerCreator, talkerAdjusted } = require('../helpers/talkerHelpers');
 const { talkerFinder, searchValidations, searchResult } = require('../helpers/searchHelpers');
 
 async function addTalker(data) {
@@ -44,19 +44,6 @@ async function updateRate(body, id) {
       : [...result, talker]
   ), []);
  await fileWriter(talkersUpdated);
-}
-
-function talkerAdjusted(talker) {
-  return {
-    id: talker.id,
-    name: talker.name,
-    age: talker.age,
-    talk: 
-      {
-        watchedAt: talker.talk_watched_at,
-        rate: talker.talk_rate,
-      },
-  };
 }
 
 function convertDataFromDB(data) {

@@ -14,6 +14,10 @@ const RATE_MIN = 1;
 const RATE_MAX = 5;
 const QUERY_Q = 'q';
 const QUERY_DATE = 'date';
+const LOCALHOST = 'localhost';
+const USER_DB = 'root';
+const PASSWORD_DB = 'password';
+const NAME_DB = 'TalkerDB';
 
 module.exports = {
   ALPHABET,
@@ -32,4 +36,8 @@ module.exports = {
   RATE_MIN,
   QUERY_Q,
   QUERY_DATE,
+  LOCALHOST,
+  USER_DB,
+  PASSWORD_DB,
+  NAME_DB,
 };

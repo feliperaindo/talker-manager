@@ -7,17 +7,27 @@ const {
   updateTalker,
   removeTalker,
   searchBy, 
-  updateRate } = require('../../utils/talkerUtils');
+  updateRate, 
+  convertDataFromDB } = require('../../utils/talkerUtils');
 
 const { midErrorHandler, midValidations } = require('../../middleware/exporter');
 
 const { HTTP, routes } = require('../../SSOT/exporter');
+const connection = require('../../database/connection');
 
 const talkerRouter = express.Router();
 
 talkerRouter.get(routes.ROOT, async (_request, response) => (
     response.status(HTTP.OK_STATUS).send(await fileReader() || [])
 ));
+
+talkerRouter.get(routes.DB, async (_request, response) => {
+  const db = connection();
+  const [resultFromDB] = await db.execute('SELECT * FROM talkers;');
+  console.log(resultFromDB);
+  const talkers = convertDataFromDB(resultFromDB);
+  response.status(HTTP.OK_STATUS).send(talkers);
+});
 
 talkerRouter.get(routes.SEARCH,
   midValidations.midTokenValidation,

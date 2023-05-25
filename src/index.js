@@ -12,6 +12,6 @@ app.use(routes.TALKER, talkerRouter);
 
 app.use(routes.LOGIN, loginRouter);
 
-app.listen(ports, () => {
+app.listen(ports.PORT, () => {
   console.log('Online');
 });

@@ -46,6 +46,23 @@ async function updateRate(body, id) {
  await fileWriter(talkersUpdated);
 }
 
+function talkerAdjusted(talker) {
+  return {
+    id: talker.id,
+    name: talker.name,
+    age: talker.age,
+    talk: 
+      {
+        watchedAt: talker.talk_watched_at,
+        rate: talker.talk_rate,
+      },
+  };
+}
+
+function convertDataFromDB(data) {
+  return data.reduce((allTalkers, talker) => [...allTalkers, talkerAdjusted(talker)], []);
+}
+
 module.exports = { 
   talkerCreator,
   talkerFinder,
@@ -54,4 +71,5 @@ module.exports = {
   removeTalker,
   searchBy,
   updateRate,
+  convertDataFromDB,
 };

@@ -1,4 +1,3 @@
-// Routes, paths and port
 const ROOT = '/';
 const TALKER = '/talker';
 const LOGIN = '/login';

@@ -6,7 +6,7 @@ const {
   addTalker,
   updateTalker,
   removeTalker,
-  searchByName } = require('../../utils/talkerUtils');
+  searchBy } = require('../../utils/talkerUtils');
 
 const { midErrorHandler, midValidations } = require('../../middleware/exporter');
 
@@ -21,8 +21,12 @@ talkerRouter.get(routes.ROOT, async (_request, response) => (
 talkerRouter.get(routes.SEARCH,
   midValidations.midTokenValidation,
   async (request, response) => {
-    const talkers = await searchByName(request.query.q);
-    return response.status(HTTP.OK_STATUS).send(talkers);
+    try {
+      const search = await searchBy(request.query);
+      return response.status(HTTP.OK_STATUS).send(search);
+    } catch (error) {
+      return response.status(error.cause).send({ message: error.message });
+    }
 });
 
 talkerRouter.get(routes.ID, 

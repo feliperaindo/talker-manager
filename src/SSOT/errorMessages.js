@@ -16,6 +16,7 @@ const NAME_INVALID = 'O "name" deve ter pelo menos 3 caracteres';
 const AGE_INVALID = 'O campo "age" deve ser um número inteiro igual ou maior que 18';
 const WATCHED_AT_INVALID = 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"';
 const RATE_INVALID = 'O campo "rate" deve ser um número inteiro entre 1 e 5';
+const DATE_INVALID = 'O parâmetro "date" deve ter o formato "dd/mm/aaaa"';
 
 module.exports = {
   TALKER_NOT_FOUND,
@@ -34,4 +35,5 @@ module.exports = {
   AGE_INVALID,
   WATCHED_AT_INVALID,
   RATE_INVALID,
+  DATE_INVALID,
 };

@@ -8,11 +8,11 @@ const { loginHelpers, emailChecker, passwordChecker } = require('../helpers/logi
 const {
   talkerHelpers,
   nameChecker,
-  dateChecker,
   rateChecker,
   ageChecker,
   tokenExistChecker,
-  tokenChecker } = require('../helpers/talkerHelpers');
+  tokenChecker, 
+  watchedAtChecker } = require('../helpers/talkerHelpers');
 
 const { HTTP, errors } = require('../SSOT/exporter');
 
@@ -41,7 +41,7 @@ function midTalkerValidation(request, _response, next) {
     keysChecker(request.body.talk, talkerHelpers.deepKeysAndErrors());
     ageChecker(request.body.age);
     nameChecker(request.body.name);
-    dateChecker(request.body.talk.watchedAt);
+    watchedAtChecker(request.body.talk.watchedAt);
     rateChecker(request.body.talk.rate);
     next();
   } catch (error) {

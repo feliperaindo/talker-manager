@@ -1,5 +1,9 @@
 const fileReader = require('./fileReader');
 const fileWriter = require('./fileWriter');
+const { objectValidator } = require('./validators');
+
+const { constants } = require('../SSOT/exporter');
+const { rateChecker, dateChecker } = require('../helpers/talkerHelpers');
 
 function talkerCreator(talker, id) {
   return {
@@ -40,9 +44,64 @@ async function removeTalker(id) {
   await fileWriter(removedTalker);
 }
 
-async function searchByName(name) {
+function searchByName(name, talkers) {
+  return talkers.filter((talker) => talker.name.includes(name));
+}
+
+function searchByRate(rate, talkers) {
+  rateChecker(+rate);
+  return talkers.filter((talker) => (talker.talk.rate === +rate));
+}
+
+function searchByDate(date, talkers) {
+  dateChecker(date);
+  
+  const [searchDay, searchMonth, searchYear] = date.split('/');
+  const searchDate = new Date(`${searchYear}-${searchMonth}-${searchDay}`).toString();
+
+  return talkers.filter((talker) => {
+    const [day, month, year] = talker.talk.watchedAt.split('/');
+    const eachTalkerDate = new Date(`${year}-${month}-${day}`).toString();
+    return (searchDate === eachTalkerDate);
+  });
+}
+
+function searchValidations(query) {
+  return { 
+    queryQ: { 
+      applied: objectValidator(query, constants.QUERY_Q),
+      filter: searchByName,
+      key: constants.QUERY_Q,
+    },
+    queryRate: { 
+      applied: objectValidator(query, constants.RATE_KEY),
+      filter: searchByRate,
+      key: constants.RATE_KEY,
+    },
+    queryDate: { 
+      applied: objectValidator(query, constants.QUERY_DATE),
+      filter: searchByDate,
+      key: constants.QUERY_DATE,
+    },
+  };
+}
+
+function searchResult(filtersApplied, query, allTalkers) {
+  return filtersApplied
+    .reduce((result, { applied, filter, key }) => (
+      applied 
+        ? filter(query[key], result) 
+        : result), [...allTalkers]);
+}
+
+async function searchBy(query) {
+  const { queryQ, queryRate, queryDate } = searchValidations(query);
   const allTalkers = await fileReader();
-  return allTalkers.filter((talker) => talker.name.includes(name));
+
+  if (queryDate.applied && !query.date.length) {
+    return allTalkers;
+  }
+  return searchResult([queryQ, queryDate, queryRate], query, allTalkers);
 }
 
 module.exports = { 
@@ -52,4 +111,7 @@ module.exports = {
   updateTalker,
   removeTalker,
   searchByName,
+  searchByDate,
+  searchBy,
+  searchByRate,
 };

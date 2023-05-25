@@ -12,6 +12,8 @@ const NAME_MIN = 3;
 const TOKEN_LENGTH = 16;
 const RATE_MIN = 1;
 const RATE_MAX = 5;
+const QUERY_Q = 'q';
+const QUERY_DATE = 'date';
 
 module.exports = {
   ALPHABET,
@@ -28,4 +30,6 @@ module.exports = {
   NAME_MIN,
   RATE_MAX,
   RATE_MIN,
+  QUERY_Q,
+  QUERY_DATE,
 };

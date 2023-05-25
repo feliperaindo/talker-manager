@@ -46,9 +46,15 @@ function ageChecker(age) {
   }
 }
 
-function dateChecker(date) {
+function watchedAtChecker(date) {
   if (!dateFormatValidator(date)) {
     throw Error(errors.WATCHED_AT_INVALID, { cause: HTTP.BAD_REQUEST });
+  }
+}
+
+function dateChecker(date) {
+  if (!dateFormatValidator(date)) {
+    throw Error(errors.DATE_INVALID, { cause: HTTP.BAD_REQUEST });
   }
 }
 
@@ -62,8 +68,9 @@ module.exports = {
   talkerHelpers: talkerHelpers(),
   nameChecker,
   ageChecker,
-  dateChecker,
+  watchedAtChecker,
   rateChecker,
   tokenExistChecker,
   tokenChecker,
+  dateChecker,
 };

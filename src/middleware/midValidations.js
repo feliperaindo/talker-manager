@@ -14,7 +14,7 @@ const {
   tokenChecker, 
   watchedAtChecker } = require('../helpers/talkerHelpers');
 
-const { HTTP, errors } = require('../SSOT/exporter');
+const { HTTP, errors, constants } = require('../SSOT/exporter');
 
 function keysChecker(object, array) {
   array.forEach((key) => {
@@ -73,9 +73,22 @@ async function midIdValidation(request, _response, next) {
   }
 }
 
+async function midRateValidation(request, _response, next) {
+  try {
+    if (!objectValidator(request.body, constants.RATE_KEY)) {
+      throw Error(errors.RATE_NOT_FOUND, { cause: HTTP.BAD_REQUEST });
+    }
+    rateChecker(request.body.rate);
+    next();
+  } catch (error) {
+    return next(error);
+  }
+}
+
 module.exports = {
   midLoginValidation,
   midTokenValidation,
   midTalkerValidation,
   midIdValidation,
+  midRateValidation,
 };

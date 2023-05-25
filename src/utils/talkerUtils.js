@@ -36,6 +36,16 @@ async function searchBy(query) {
   return searchResult([queryQ, queryDate, queryRate], query, allTalkers);
 }
 
+async function updateRate(body, id) {
+ const oldData = await fileReader();
+ const talkersUpdated = oldData.reduce((result, talker) => (
+    (talker.id === +id) 
+      ? [...result, { ...talker, talk: { ...talker.talk, rate: body.rate } }]
+      : [...result, talker]
+  ), []);
+ await fileWriter(talkersUpdated);
+}
+
 module.exports = { 
   talkerCreator,
   talkerFinder,
@@ -43,4 +53,5 @@ module.exports = {
   updateTalker,
   removeTalker,
   searchBy,
+  updateRate,
 };

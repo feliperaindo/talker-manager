@@ -1,5 +1,6 @@
 const OK_STATUS = 200;
 const DELETE_STATUS = 204;
+const UPDATE_STATUS = 204;
 const TOKEN_NOT_FOUND = 401;
 const NOT_FOUND_STATUS = 404;
 const BAD_REQUEST = 400;
@@ -12,4 +13,5 @@ module.exports = {
   BAD_REQUEST,
   CREATED_STATUS,
   DELETE_STATUS,
+  UPDATE_STATUS,
 };

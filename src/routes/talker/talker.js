@@ -6,7 +6,8 @@ const {
   addTalker,
   updateTalker,
   removeTalker,
-  searchBy } = require('../../utils/talkerUtils');
+  searchBy, 
+  updateRate } = require('../../utils/talkerUtils');
 
 const { midErrorHandler, midValidations } = require('../../middleware/exporter');
 
@@ -42,6 +43,13 @@ talkerRouter.use(midValidations.midTokenValidation);
 talkerRouter.delete(routes.ID, async (request, response) => {
     removeTalker(Number(request.params.id));
     return response.status(HTTP.DELETE_STATUS).send();
+});
+
+talkerRouter.patch(routes.RATE,
+  midValidations.midRateValidation,
+  async (request, response) => {
+    await updateRate(request.body, request.params.id);
+    response.status(HTTP.UPDATE_STATUS).send({});
 });
 
 talkerRouter.use(midValidations.midTalkerValidation);

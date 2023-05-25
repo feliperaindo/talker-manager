@@ -43,7 +43,7 @@ talkerRouter.get(routes.ID,
 talkerRouter.use(midValidations.midTokenValidation);
 
 talkerRouter.delete(routes.ID, async (request, response) => {
-    utils.removeTalker(Number(request.params.id));
+    await utils.removeTalker(Number(request.params.id));
     return response.status(HTTP.DELETE_STATUS).send();
 });
 

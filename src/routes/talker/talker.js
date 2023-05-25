@@ -24,7 +24,6 @@ talkerRouter.get(routes.ROOT, async (_request, response) => (
 talkerRouter.get(routes.DB, async (_request, response) => {
   const db = connection();
   const [resultFromDB] = await db.execute('SELECT * FROM talkers;');
-  console.log(resultFromDB);
   const talkers = convertDataFromDB(resultFromDB);
   response.status(HTTP.OK_STATUS).send(talkers);
 });
